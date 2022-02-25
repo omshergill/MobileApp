@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:constants="clr-namespace:VolMobile.Constants"
+             xmlns:converters="clr-namespace:VolMobile.Converters"
+             xmlns:controls="clr-namespace:VolMobile.Controls"
+             xmlns:login="clr-namespace:VolMobile.Pages.AuthenticationPages.Login"
+             x:Class="VolMobile.Pages.AuthenticationPages.Login.LoginPage"             
+             BackgroundImage="backGround.png">
+    <ContentPage.BindingContext>
+        <login:LoginPageViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid RowSpacing="0" Margin="0"
+              HorizontalOptions="Fill" VerticalOptions="Fill"
+              ColumnSpacing="0"
+             >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+
+
+            <!--ROW 0-->
+            <controls:BindableSkiaImage  Grid.Row="0" Grid.Column="0" Margin="10,0,10,0"  HorizontalOptions="Fill" VerticalOptions="Fill" Image="{Binding Source={x:Static constants:ImageSources.Logo}}"></controls:BindableSkiaImage>
+            <!--Put version here-->
+
+            <!--Purple Background - Row 1 - 3 -->
+            <BoxView Grid.Row="1" Grid.RowSpan="3"  BackgroundColor="{Binding Source={x:Static constants:Colors.PrimaryDark}}" CornerRadius="5" HorizontalOptions="Fill" VerticalOptions="Fill"  Opacity="0.8"/>
+
+            <!--ROW 1-->
+            <Label Grid.Row="1" Text="New to Here2Volunteer? Sign Up!" TextColor="{Binding Source={x:Static constants:Colors.FontTitleInverse}}" HorizontalOptions="Center" VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="SignUpSelected"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+            <!--ROW 2-->
+            <StackLayout Grid.Row="2"  
+                     HorizontalOptions="FillAndExpand" Orientation="Vertical" VerticalOptions="EndAndExpand" Margin="10,0,10,0">
+
+
+                <Entry TabIndex="1" Text="{Binding UserName }" x:Name="User_Name" HorizontalOptions="FillAndExpand" Completed="userNameInput" Keyboard="Email" Placeholder="Username" BackgroundColor="White"/>
+                <Entry TabIndex="2" Text="{Binding Password}" x:Name="_Password" HorizontalOptions="FillAndExpand" IsVisible="True" Completed="passwordInput" Keyboard="Default"  Placeholder="Password" IsPassword="True"  BackgroundColor="White"/>
+                <Entry TabIndex="3" Text="{Binding Password}" HorizontalOptions="FillAndExpand" IsVisible="false" Completed="passwordInput" Keyboard="Default"  Placeholder="Password" IsPassword="False"  BackgroundColor="White"/>
+
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0">
+                    <Label HorizontalTextAlignment="Center" VerticalTextAlignment="Center" BackgroundColor="Transparent" Text="Remember Me" TextColor="{Binding Source={x:Static constants:Colors.FontTitleInverse}}" />
+
+                    <Frame CornerRadius="0" Margin="2" Padding="0"  HorizontalOptions="Center" VerticalOptions="Center" HasShadow="False" BackgroundColor="Transparent">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Toggle_Remember"/>
+                        </Frame.GestureRecognizers>
+
+                        <controls:CheckboxImageView HeightRequest="20" WidthRequest="20"  IsChecked="{Binding RememberMe}"
+                                                TrueImage="{Binding Source={x:Static constants:ImageSources.CheckedTrue_White},Converter={converters:SkiaConstantsConverter}}"
+                                                FalseImage="{Binding Source={x:Static constants:ImageSources.CheckedFalse_White},Converter={converters:SkiaConstantsConverter}}">
+                        </controls:CheckboxImageView>
+                    </Frame>
+                </StackLayout>
+
+
+            </StackLayout>
+
+            <!--ROW 3-->
+            <Frame IsEnabled="{Binding IsLoading, Converter={converters:InverseBooleanConverter}}" Grid.Row="3" CornerRadius="3" Margin="10,6,10,10" Padding="10"  VerticalOptions="Center" HorizontalOptions="FillAndExpand" BackgroundColor="{Binding Source={x:Static constants:Colors.PrimaryLight}}" >
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="LoginButtonClicked" />
+                </Frame.GestureRecognizers>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+
+                    <!--<Image VerticalOptions="Center" Margin="2" HorizontalOptions="Center" HeightRequest="18" WidthRequest="18" Aspect="Fill"  Source="{Binding Source={x:Static constants:ImageSources.Calendar}}" >
+                        </Image>-->
+                    <Label VerticalOptions="Center" HorizontalOptions="CenterAndExpand" Text="Sign In" TextColor="{Binding Source={x:Static constants:Colors.ButtonSecondary}}"/>
+                </StackLayout>
+            </Frame>
+
+
+            <!--ROW 4-->
+            <Label Grid.Row="4" Text="Forgot Password?"  Margin="0,6,0,0" TextColor="{Binding Source={x:Static constants:Colors.Primary}}" HorizontalOptions="Center" VerticalOptions="Start">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="ForgotPassword"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+            <!--ROW 5-->
+            <StackLayout  Grid.Row="5" BackgroundColor="{Binding Source={x:Static constants:Colors.Primary}}"
+                     HorizontalOptions="FillAndExpand" Orientation="Vertical" VerticalOptions="EndAndExpand" >
+                <StackLayout.IsVisible>
+                    <OnPlatform x:TypeArguments="x:Boolean"  Default="True" Android="True" iOS="False"></OnPlatform>
+                </StackLayout.IsVisible>
+                <Button HorizontalOptions="Fill" BackgroundColor="{Binding Source={x:Static constants:Colors.Primary}}"   Text="What is Here 2 Volunteer?" TextColor="{Binding Source={x:Static constants:Colors.FontTitleInverse}}" Clicked="infoButtonClicked"/>
+            </StackLayout>
+
+
+            <!--Loading Indicator -->
+            <Frame Grid.Row="0" Grid.RowSpan="6" BackgroundColor="Transparent" IsVisible="false">
+                <Frame BackgroundColor="{Binding Source={x:Static constants:Colors.FontTitleInverse}}" Opacity="0.9" WidthRequest="60" HeightRequest="60"  HorizontalOptions="Center" VerticalOptions="Center">
+
+                </Frame>
+            </Frame>
+            <Frame Grid.Row="0" Grid.RowSpan="6" BackgroundColor="Transparent" IsVisible="false">
+                <StackLayout Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center">
+                    <ActivityIndicator  WidthRequest="40" HeightRequest="40" HorizontalOptions="Center" VerticalOptions="Center"
+                           IsRunning="False"
+                           Color="{Binding Source={x:Static constants:Colors.Primary}}" />
+                    <Label Text="Loading..." FontAttributes="Bold" TextColor="{Binding Source={x:Static constants:Colors.Primary}}" HorizontalOptions="Center" VerticalOptions="Center"></Label>
+                </StackLayout>
+            </Frame>
+
+        </Grid>
+
+    </ContentPage.Content>
+</ContentPage>
